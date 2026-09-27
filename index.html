@@ -1,1 +1,37 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hustle Shooters</title><style>body{margin:0;background:#0a0a1a;color:#fff;text-align:center;overflow:hidden}canvas{background:#111;display:block;margin:auto;border:2px solid #0ff}#ui{position:absolute;top:10px;left:10px;color:#0ff;font-weight:bold}button{padding:12px 25px;background:#0ff;border:none;font-weight:bold;border-radius:8px}#menu{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#000e;padding:20px;border-radius:15px;border:2px solid #0ff;width:80%}</style></head><body><div id="ui">SCORE:<span id="s">0</span>|WAVE:<span id="w">1</span></div><canvas id="c" width="400" height="600"></canvas><div id="menu"><h2>🚀 HUSTLE SHOOTERS<br>UNLIMITED LEVELS</h2><button onclick="start()">START GAME</button></div><script>let C=document.getElementById('c'),X=C.getContext('2d'),S=0,W=1,P={x:180,y:550,w:40,h:20},B=[],E=[],G=false;function start(){document.getElementById('menu').style.display='none';G=true;S=0;W=1;B=[];E=[];loop();spawn()}C.addEventListener('touchmove',e=>P.x=e.touches[0].clientX-20);setInterval(()=>{if(G)B.push({x:P.x+18,y:P.y,w:4,h:10})},200);function spawn(){if(!G)return;E.push({x:Math.random()*360,y:-40,w:30,h:30,s:1.5+W*0.4});if(S>W*100){W++;document.getElementById('w').innerText=W}setTimeout(spawn,800-Math.min(W*50,600))}function loop(){if(!G)return;X.clearRect(0,0,400,600);X.fillStyle='#0ff';X.fillRect(P.x,P.y,P.w,P.h);X.fillStyle='#ff0';B.forEach((b,i)=>{b.y-=7;X.fillRect(b.x,b.y,b.w,b.h);if(b.y<0)B.splice(i,1)});X.fillStyle='#f00';E.forEach((e,ei)=>{e.y+=e.s;X.fillRect(e.x,e.y,e.w,e.h);B.forEach((b,bi)=>{if(b.x<e.x+e.w&&b.x+b.w>e.x&&b.y<e.y+e.h&&b.y+b.h>e.y){E.splice(ei,1);B.splice(bi,1);S+=10;document.getElementById('s').innerText=S}});if(e.y>600){G=false;document.getElementById('menu').style.display='block';document.getElementById('menu').innerHTML='<h2>GAME OVER WAVE '+W+'</h2><p>Score:'+S+'</p><button onclick=start()>PLAY AGAIN UNLIMITED</button>'}});requestAnimationFrame(loop)}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Hustle Shooters - Unlimited Pro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none}
+body{background:radial-gradient(ellipse at center,#0f0f2a 0%,#050510 100%);color:#fff;font-family:Arial,Black Ops One;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center}
+#top{width:100%;max-width:420px;display:flex;justify-content:space-between;padding:10px 15px;background:rgba(0,255,255,0.1);border-bottom:2px solid #0ff;font-weight:bold;color:#0ff;text-shadow:0 0 10px #0ff}
+canvas{background:linear-gradient(180deg,#0a0a20 0%,#000 100%);display:block;border:2px solid #0ff;box-shadow:0 0 30px rgba(0,255,255,0.3),inset 0 0 50px rgba(0,255,255,0.05);border-radius:12px;margin-top:5px}
+#menu{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,rgba(10,10,30,0.95),rgba(0,0,0,0.98));padding:30px 25px;border-radius:20px;border:2px solid #0ff;box-shadow:0 0 40px rgba(0,255,255,0.5);text-align:center;width:90%;max-width:380px;z-index:10}
+h1{font-size:22px;color:#0ff;text-shadow:0 0 15px #0ff;margin-bottom:8px;letter-spacing:1px}
+.sub{color:#aaa;font-size:12px;margin-bottom:20px}
+.btn{padding:16px 35px;background:linear-gradient(135deg,#0ff,#00aaff);border:none;border-radius:12px;color:#000;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 5px 20px rgba(0,255,255,0.5);transition:0.2s;width:100%}
+.btn:active{transform:scale(0.95)}
+.badge{display:inline-block;background:rgba(0,255,255,0.2);border:1px solid #0ff;padding:4px 10px;border-radius:20px;font-size:10px;margin:4px;color:#0ff}
+</style>
+</head>
+<body>
+<div id="top"><span>SCORE: <b id="sc">0</b></span><span>WAVE: <b id="wv">1</b></span><span>❤️ <b id="hp">3</b></span></div>
+<canvas id="g" width="400" height="620"></canvas>
+<div id="menu">
+<h1>🚀 HUSTLE SHOOTERS<br>UNLIMITED PRO</h1>
+<p class="sub">Lagos to the World! Destroy enemies, survive unlimited waves!</p>
+<div style="margin:10px 0"><span class="badge">👾 UNLIMITED WAVES</span><span class="badge">👑 BOSS EVERY 5</span><span class="badge">💎 POWER-UPS</span></div>
+<button class="btn" onclick="startGame()">▶ START HUSTLE</button>
+<p style="margin-top:15px;font-size:11px;color:#666">Slide finger to move • Auto-fire</p>
+</div>
+<script>
+const C=document.getElementById('g'),X=C.getContext('2d');
+let S=0,W=1,H=3,PL={x:180,y:560,w:40,h:40},B=[],E=[],P=[],EX=[],STARS=[],game=0,keys={};
+for(let i=0;i<80;i++)STARS.push({x:Math.random()*400,y:Math.random()*620,s:Math.random()*2+0.5,sp:Math.random()*2+0.5});
+
+function startGame(){document.getElementById('menu').style.display='none';S=0;W=1;H=3;B=[];E=[];P=[];EX=[];PL.x=180;game=1;document.getElementById('sc').innerText=0;document.getElementById('wv').innerText=1;document.getElementById('hp').innerText=3;loop();spawner();}
+
+C.addEventListener('
